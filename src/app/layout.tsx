@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import QueryProvider from "@/providers/QueryProvider";
 
 const serif = Cormorant_Garamond({
   weight: ["300", "400", "500", "600"],
@@ -29,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${serif.variable} ${sans.variable}`}>
       <body className="font-sans antialiased">
-        <Navigation />
-        {children}
+        <QueryProvider>
+          <Navigation />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
