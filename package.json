@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "import-artworks": "tsx scripts/import-artworks.ts"
+    "import-artworks": "tsx scripts/import-artworks.ts",
+    "optimize-upload": "tsx scripts/optimize_and_upload.ts"
   },
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.14",
@@ -22,12 +23,13 @@
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.4.0",
     "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.33",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",
