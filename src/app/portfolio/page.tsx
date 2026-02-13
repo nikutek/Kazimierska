@@ -81,7 +81,7 @@ export default function PortfolioPage() {
             {artworks.map((artwork) => (
               <Link
                 key={artwork.id}
-                href={`/artwork/${artwork.id}`}
+                href={`/portfolio/${artwork.id}`}
                 className="block break-inside-avoid group"
               >
                 <div className="relative overflow-hidden rounded-sm bg-gray-100">
