@@ -5,9 +5,14 @@ import { ExternalLink } from "lucide-react";
 
 export default function AboutPage() {
   const [activeSection, setActiveSection] = useState("bio");
+  const [isNavVisible, setIsNavVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Nawigacja sekcji
       const sections = [
         "bio",
         "exhibitions",
@@ -26,11 +31,25 @@ export default function AboutPage() {
           }
         }
       }
+
+      // Ukrywanie/pokazywanie nawigacji
+      if (currentScrollY < 100) {
+        // Zawsze pokazuj na samej górze
+        setIsNavVisible(true);
+      } else if (currentScrollY < lastScrollY) {
+        // Scroll w górę - pokaż
+        setIsNavVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        // Scroll w dół - ukryj
+        setIsNavVisible(false);
+      }
+
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -59,9 +78,57 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Sticky Navigation */}
-        <nav className="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 mb-16 -mx-6 px-6 lg:-mx-8 lg:px-8">
-          <div className="flex justify-center gap-8 py-4 overflow-x-auto">
+        {/* Sticky Navigation z animacją */}
+        <nav
+          className={`sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-gray-200 mb-16 -mx-6 px-6 lg:-mx-8 lg:px-8 transition-transform duration-300 ${
+            isNavVisible ? "translate-y-0" : "-translate-y-full"
+          }`}
+        >
+          {/* Mobile & Tablet - Segmented control */}
+          <div className="lg:hidden py-4">
+            <div className="bg-gray-100 rounded-lg p-1 space-y-1">
+              <div className="grid grid-cols-3 gap-1">
+                {[
+                  { id: "bio", label: "Bio" },
+                  { id: "exhibitions", label: "Exhibitions" },
+                  { id: "projects", label: "Projects" },
+                ].map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => scrollToSection(section.id)}
+                    className={`py-2 px-2 rounded-md text-xs tracking-wider uppercase transition-all ${
+                      activeSection === section.id
+                        ? "bg-white shadow-sm font-medium"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                {[
+                  { id: "publications", label: "Publications" },
+                  { id: "research", label: "Research" },
+                ].map((section) => (
+                  <button
+                    key={section.id}
+                    onClick={() => scrollToSection(section.id)}
+                    className={`py-2 px-2 rounded-md text-xs tracking-wider uppercase transition-all ${
+                      activeSection === section.id
+                        ? "bg-white shadow-sm font-medium"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    {section.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop - Original buttons */}
+          <div className="hidden lg:flex justify-center gap-8 py-4">
             {[
               { id: "bio", label: "Bio" },
               { id: "exhibitions", label: "Exhibitions" },
