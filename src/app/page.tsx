@@ -69,12 +69,6 @@ export default async function Home() {
                 &ldquo;From life&apos;s wounds, I sculpted calm; today I tell of
                 human essence through silence.&rdquo;
               </p>
-
-              <div className="pt-4">
-                <p className="text-xs tracking-[0.3em] text-gray-400 uppercase">
-                  Est. 2024
-                </p>
-              </div>
             </div>
           </div>
         </div>
