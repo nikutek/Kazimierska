@@ -42,22 +42,43 @@ export default function PortfolioPage() {
               : `${artworks.length} ${artworks.length === 1 ? "dzieło" : "dzieł"}`}
           </p>
         </div>
+        {/* Filters - segmented control */}
+        <div className="mb-16 max-w-md mx-auto md:max-w-none">
+          {/* Mobile & Tablet */}
+          <div className="md:hidden bg-gray-100 rounded-lg p-1">
+            <div className="grid grid-cols-2 gap-1">
+              {filters.map((f) => (
+                <button
+                  key={f.label}
+                  onClick={() => setFilter(f.value)}
+                  className={`py-3 px-4 rounded-md text-xs tracking-wider uppercase transition-all ${
+                    filter === f.value
+                      ? "bg-white shadow-sm font-medium"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        {/* Filters */}
-        <div className="flex justify-center gap-6 mb-16">
-          {filters.map((f) => (
-            <button
-              key={f.label}
-              onClick={() => setFilter(f.value)}
-              className={`text-sm tracking-wider uppercase transition-opacity ${
-                filter === f.value
-                  ? "opacity-100 font-medium"
-                  : "opacity-60 hover:opacity-100"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
+          {/* Desktop - Buttons */}
+          <div className="hidden md:flex justify-center gap-6">
+            {filters.map((f) => (
+              <button
+                key={f.label}
+                onClick={() => setFilter(f.value)}
+                className={`text-sm tracking-wider uppercase transition-opacity ${
+                  filter === f.value
+                    ? "opacity-100 font-medium"
+                    : "opacity-60 hover:opacity-100"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Loading skeleton */}
