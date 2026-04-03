@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Masonry from "react-masonry-css";
 import { useArtworks } from "@/hooks/useArtworks";
 import { ArtworkType } from "../../../types/database";
 import Image from "next/image";
@@ -12,18 +13,24 @@ export default function PortfolioPage() {
   const { data: artworks = [], isLoading, error } = useArtworks(filter);
 
   const filters: { value: ArtworkType | undefined; label: string }[] = [
-    { value: undefined, label: "Wszystkie" },
-    { value: "sculpture", label: "Rzeźby" },
-    { value: "painting", label: "Malarstwo" },
-    { value: "drawing", label: "Grafika" },
+    { value: undefined, label: "All" },
+    { value: "sculpture", label: "Sculptures" },
+    { value: "painting", label: "Paintings" },
+    { value: "drawing", label: "Graphics" },
   ];
+
+  const breakpointColumns = {
+    default: 3,
+    1024: 2,
+    640: 1,
+  };
 
   if (error) {
     return (
       <main className="min-h-screen bg-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center py-20">
-            <p className="text-red-500">Błąd podczas ładowania dzieł</p>
+            <p className="text-red-500">Error loading artworks</p>
           </div>
         </div>
       </main>
@@ -39,12 +46,12 @@ export default function PortfolioPage() {
           <p className="text-gray-500 tracking-wide">
             {isLoading
               ? "..."
-              : `${artworks.length} ${artworks.length === 1 ? "dzieło" : "dzieł"}`}
+              : `${artworks.length} ${artworks.length === 1 ? "artwork" : "artworks"}`}
           </p>
         </div>
-        {/* Filters - segmented control */}
+
+        {/* Filters */}
         <div className="mb-16 max-w-md mx-auto md:max-w-none">
-          {/* Mobile & Tablet */}
           <div className="md:hidden bg-gray-100 rounded-lg p-1">
             <div className="grid grid-cols-2 gap-1">
               {filters.map((f) => (
@@ -63,7 +70,6 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          {/* Desktop - Buttons */}
           <div className="hidden md:flex justify-center gap-6">
             {filters.map((f) => (
               <button
@@ -83,27 +89,38 @@ export default function PortfolioPage() {
 
         {/* Loading skeleton */}
         {isLoading && (
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+          <Masonry
+            breakpointCols={breakpointColumns}
+            className="flex gap-8"
+            columnClassName="flex flex-col gap-8"
+          >
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="break-inside-avoid">
-                <div className="aspect-[3/4] bg-gray-200 animate-pulse rounded-sm" />
+              <div key={i}>
+                <div
+                  className="bg-gray-200 animate-pulse rounded-sm w-full"
+                  style={{ aspectRatio: i % 2 === 0 ? "3/4" : "2/3" }}
+                />
                 <div className="mt-4 space-y-2">
                   <div className="h-6 bg-gray-200 animate-pulse rounded w-3/4" />
                   <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2" />
                 </div>
               </div>
             ))}
-          </div>
+          </Masonry>
         )}
 
-        {/* Grid */}
+        {/* Masonry grid */}
         {!isLoading && artworks.length > 0 && (
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+          <Masonry
+            breakpointCols={breakpointColumns}
+            className="flex gap-8"
+            columnClassName="flex flex-col gap-8"
+          >
             {artworks.map((artwork) => (
               <Link
                 key={artwork.id}
                 href={`/portfolio/${artwork.id}`}
-                className="block break-inside-avoid group"
+                className="block group"
               >
                 <div className="relative overflow-hidden rounded-sm bg-gray-100">
                   <Image
@@ -116,13 +133,12 @@ export default function PortfolioPage() {
                     loading="lazy"
                     quality={75}
                     placeholder="blur"
-                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4=" // Placeholder SVG
+                    blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAwIiBoZWlnaHQ9IjQ3NSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4="
                   />
                 </div>
 
                 <div className="mt-4 px-2">
                   <h3 className="font-serif text-xl mb-1">{artwork.title}</h3>
-
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     {artwork.year && <span>{artwork.year}</span>}
                     {artwork.material && (
@@ -132,7 +148,6 @@ export default function PortfolioPage() {
                       </>
                     )}
                   </div>
-
                   {artwork.dimensions && (
                     <p className="text-sm text-gray-400 mt-1">
                       {artwork.dimensions}
@@ -141,13 +156,13 @@ export default function PortfolioPage() {
                 </div>
               </Link>
             ))}
-          </div>
+          </Masonry>
         )}
 
         {/* Empty state */}
         {!isLoading && artworks.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-400 text-lg">Brak dzieł do wyświetlenia</p>
+            <p className="text-gray-400 text-lg">No artworks to display</p>
           </div>
         )}
       </div>

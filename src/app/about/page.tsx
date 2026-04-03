@@ -158,33 +158,21 @@ export default function AboutPage() {
             <h2 className="font-serif text-4xl mb-8">About</h2>
 
             <div className="prose prose-lg max-w-none space-y-6 text-gray-700 leading-relaxed">
-              <p className="font-serif text-2xl italic text-gray-600 leading-relaxed">
-                &ldquo;From life&apos;s wounds, I sculpted calm; today I tell of
-                human essence through silence.&rdquo;
+
+              <p>
+                Piotr Goławski is a sculptor and visual artist whose work explores the human condition through form, material, and silence. His creative practice spans sculpture, painting, and drawing, with a particular focus on how matter itself can become a carrier of inner narratives and emotion.
               </p>
 
               <p>
-                Piotr Goławski is a sculptor and visual artist whose work
-                explores the human condition through form, material, and
-                silence. His creative practice spans sculpture, painting, and
-                drawing, with a particular focus on how matter itself can become
-                a carrier of inner narratives and emotion.
+                A graduate of the Academy of Fine Arts in Warsaw (Painting & Drawing, Open Academy, 2020), Goławski’s work is characterized by a contemplative approach to materials—especially clay subjected to raku firing—where cracks, burns, and surface textures become visual records of human experience. 
               </p>
 
               <p>
-                A graduate of the Academy of Fine Arts in Warsaw (Painting &
-                Drawing, Open Academy, 2020), Goławski's work is characterized
-                by a contemplative approach to materials—especially clay
-                subjected to raku firing—where cracks, burns, and surface
-                textures become visual records of human experience.
+                His work has been presented internationally, with his physical presence on the global art scene gradually unfolding during Miami Art Week 2025 (Spectrum Miami), following earlier online representation on platforms such as Saatchi Art.  Beyond his studio practice, he is engaged in artistic projects of a social and therapeutic nature, including regular workshops for children and young people, also those with disabilities.
               </p>
 
               <p>
-                Beyond his studio practice, he is deeply engaged in social and
-                therapeutic art projects, including cyclical workshops for
-                children and youth with disabilities at the Educational Center
-                in Łuków, for which he received the honorary title "Friend of
-                the School."
+              His work extends into the exploration of the relationship between art and its environment through ongoing artistic research projects such as “Thought Written in Sculptural Form” (Zapisana w formie myśl–rzeźba) and “In the Suspended State of Human Matter – A Study” (W zawieszenia stanie materii ludzkiej studium).
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 not-prose">
@@ -213,15 +201,30 @@ export default function AboutPage() {
             <h2 className="font-serif text-4xl mb-12">Exhibitions</h2>
 
             <div className="space-y-16">
+              <YearGroup year="2026">
+                <ExhibitionItem title="Art Expo New York 2026"
+                location="Pier 36, New York City"
+                description="Presented with ORAC Gallery"
+                isArtFair
+                />
+              </YearGroup>
+
               {/* 2025 */}
               <YearGroup year="2025">
                 <ExhibitionItem
-                  title="International Painting Symposium 'Signs of Kazimierz III'"
+                  title="Miami Art Week 2025"
+                  location="Mana Wynwood Convention Center, Miami"
+                  description="presented with Plogix Gallery"
+                  isArtFair
+                />
+
+                <ExhibitionItem
+                  title="International Painting Residency 'Signs of Kazimierz III'"
                   location="Kazimierz Dolny, Poland"
                   description="Outdoor exhibition on the town square. Organizer: ZAP."
                 />
                 <ExhibitionItem
-                  title="Post-symposium exhibition"
+                  title="Post-Residency exhibition"
                   location="Dworek Miętne, Poland"
                   description="Society of Maciejowice Enthusiasts"
                   isGroup
@@ -229,7 +232,7 @@ export default function AboutPage() {
                 <ExhibitionItem
                   title="By the Okrzejka and the Vistula – Historical Landscapes"
                   location="Miętne, Poland"
-                  description="International Painting Symposium. Organizers: Society of Friends of Maciejowice & Polish Kościuszko Foundation."
+                  description="International Painting Residency. Organizers: Society of Friends of Maciejowice & Polish Kościuszko Foundation."
                   isGroup
                 />
                 <ExhibitionItem
@@ -238,7 +241,7 @@ export default function AboutPage() {
                   isGroup
                 />
                 <ExhibitionItem
-                  title="International Painting & Sculpture Symposium 'Reymontowska Sonata'"
+                  title="International Painting & Sculpture Residency 'Reymontowska Sonata'"
                   location="Reymontówka Chlewiska, Poland"
                 />
                 <ExhibitionItem
@@ -259,7 +262,7 @@ export default function AboutPage() {
                 <ExhibitionItem
                   title="Signs of Kazimierz"
                   location="Kazimierz Dolny, Poland"
-                  description="Symposium of artists of ZAP OM"
+                  description="Residency of artists of ZAP OM"
                 />
                 <ExhibitionItem
                   title="Dwa Brzegi 15 – Art Channel"
@@ -280,7 +283,7 @@ export default function AboutPage() {
                 <ExhibitionItem
                   title="Kazimierz Dolny"
                   location="'Communio Graphis' Gallery, Góra Kalwaria, Poland"
-                  description="Post-symposium group exhibition"
+                  description="Post-Residency group exhibition"
                   isGroup
                 />
                 <ExhibitionItem
@@ -305,7 +308,7 @@ export default function AboutPage() {
                   isSolo
                 />
                 <ExhibitionItem
-                  title="Symposium in Kazimierz Dolny"
+                  title="Residency in Kazimierz Dolny"
                   location="Kazimierz Dolny, Poland"
                   description="Organizer: ZAP OM"
                 />
@@ -355,7 +358,7 @@ export default function AboutPage() {
                   isGroup
                 />
                 <ExhibitionItem
-                  title="International Painting Symposium 'The Beauty of the Liwiec Valley'"
+                  title="International Painting Residency 'The Beauty of the Liwiec Valley'"
                   location="Reymontówka, Chlewiska, Poland"
                 />
                 <ExhibitionItem
@@ -405,7 +408,7 @@ export default function AboutPage() {
                   isGroup
                 />
                 <ExhibitionItem
-                  title="ZAP painting symposium"
+                  title="ZAP painting Residency"
                   location="Dłużew, Poland"
                 />
                 <ExhibitionItem
@@ -469,7 +472,7 @@ export default function AboutPage() {
               {/* 2019 */}
               <YearGroup year="2019">
                 <ExhibitionItem
-                  title="ASP painting symposium"
+                  title="ASP painting Residency"
                   location="Dłużew, Poland"
                 />
                 <ExhibitionItem
@@ -662,18 +665,25 @@ function ExhibitionItem({
   description,
   isSolo = false,
   isGroup = false,
+  isArtFair = false,
 }: {
   title: string;
   location: string;
   description?: string;
   isSolo?: boolean;
   isGroup?: boolean;
+  isArtFair?: boolean;
 }) {
   return (
     <div className="pl-6">
       <div className="flex flex-wrap items-baseline gap-2 mb-2">
-        {isSolo && (
+        {isArtFair && (
           <span className="text-xs tracking-wider uppercase text-white bg-black px-2 py-1 rounded">
+            Art Fair
+          </span>
+        )}
+        {isSolo && (
+          <span className="text-xs tracking-wider uppercase text-black bg-gray-400 px-2 py-1 rounded">
             Solo
           </span>
         )}

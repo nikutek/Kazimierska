@@ -61,21 +61,7 @@ export default function KazimierskaOasisPage() {
           </div>
         </section>
 
-        {/* Image placeholder - dodaj zdjęcia jak będą */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="aspect-[4/5] bg-gray-100 rounded-sm relative overflow-hidden">
-            {/* <Image src="..." alt="Studio exterior" fill className="object-cover" /> */}
-            <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-              [Studio exterior]
-            </div>
-          </div>
-          <div className="aspect-[4/5] bg-gray-100 rounded-sm relative overflow-hidden">
-            {/* <Image src="..." alt="Work in progress" fill className="object-cover" /> */}
-            <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-              [Work in progress]
-            </div>
-          </div>
-        </section>
+        
 
         {/* Kazimierz Dolny Context */}
         <section className="space-y-8">
@@ -171,31 +157,7 @@ export default function KazimierskaOasisPage() {
         </section>
 
         {/* Image gallery - panoramic */}
-        <section className="space-y-8">
-          <h2 className="font-serif text-4xl md:text-5xl">The Space</h2>
-
-          <div className="aspect-[16/9] bg-gray-100 rounded-sm relative overflow-hidden">
-            {/* <Image src="..." alt="Panoramic view" fill className="object-cover" /> */}
-            <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-              [Panoramic view of the studio]
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div
-                key={i}
-                className="aspect-square bg-gray-100 rounded-sm relative overflow-hidden"
-              >
-                {/* <Image src="..." alt={`Detail ${i}`} fill className="object-cover" /> */}
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
-                  [Detail {i}]
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
+        
         {/* Connection to history */}
         <section className="border-t border-gray-200 pt-16 space-y-8">
           <h2 className="font-serif text-4xl md:text-5xl">
