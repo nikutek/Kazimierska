@@ -206,6 +206,9 @@ export default function AboutPage() {
                 location="Pier 36, New York City"
                 description="Presented with ORAC Gallery"
                 isArtFair
+                /><ExhibitionItem title="Painted"
+                location="Terminal Kultury Gocław, Warsaw"
+                description="group exhibition of members of the Mazovian District of the Związek Artystów Plastyków"
                 />
               </YearGroup>
 
