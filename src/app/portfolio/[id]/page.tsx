@@ -43,13 +43,13 @@ export default function ArtworkPage() {
       <main className="min-h-screen bg-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center py-20">
-            <p className="text-gray-400 text-lg mb-8">Nie znaleziono dzieła</p>
+            <p className="text-gray-400 text-lg mb-8">Artwork not found</p>
             <Link
               href="/portfolio"
               className="inline-flex items-center gap-2 text-sm tracking-wider uppercase opacity-60 hover:opacity-100 transition-opacity"
             >
               <ArrowLeft className="w-4 h-4" />
-              Powrót do portfolio
+              Back to portfolio
             </Link>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function ArtworkPage() {
               {artwork.year && (
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm tracking-wider uppercase text-gray-500">
-                    Rok
+                    Year
                   </span>
                   <span className="text-lg">{artwork.year}</span>
                 </div>
@@ -121,7 +121,7 @@ export default function ArtworkPage() {
               {artwork.material && (
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm tracking-wider uppercase text-gray-500">
-                    Materiał
+                    Material
                   </span>
                   <span className="text-lg text-right">{artwork.material}</span>
                 </div>
@@ -130,7 +130,7 @@ export default function ArtworkPage() {
               {artwork.technique && (
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm tracking-wider uppercase text-gray-500">
-                    Technika
+                    Technique
                   </span>
                   <span className="text-lg text-right">
                     {artwork.technique}
@@ -141,7 +141,7 @@ export default function ArtworkPage() {
               {artwork.dimensions && (
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm tracking-wider uppercase text-gray-500">
-                    Wymiary
+                    Diemensions
                   </span>
                   <span className="text-lg text-right">
                     {artwork.dimensions}
@@ -156,7 +156,7 @@ export default function ArtworkPage() {
                 <div className="border-t border-gray-200" />
                 <div>
                   <h2 className="text-sm tracking-wider uppercase text-gray-500 mb-4">
-                    Opis
+                    Description
                   </h2>
                   <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                     {artwork.description}
@@ -170,7 +170,7 @@ export default function ArtworkPage() {
               {artwork.is_sold ? (
                 <div className="text-center py-4">
                   <span className="inline-block px-6 py-3 bg-gray-100 text-gray-600 text-sm tracking-wider uppercase rounded">
-                    Sprzedane
+                    Sold
                   </span>
                 </div>
               ) : artwork.price ? (
@@ -179,14 +179,14 @@ export default function ArtworkPage() {
                     <p className="text-4xl font-serif mb-2">
                       {artwork.price.toLocaleString("pl-PL")} PLN
                     </p>
-                    <p className="text-sm text-gray-500">+ koszty wysyłki</p>
+                    <p className="text-sm text-gray-500">+ shipping cost</p>
                   </div>
 
                   <Link
                     href="/contact"
                     className="block w-full text-center px-8 py-4 bg-black text-white text-sm tracking-widest uppercase hover:bg-gray-800 transition-colors"
                   >
-                    Zapytaj o dzieło
+                    Ask about artwork
                   </Link>
                 </div>
               ) : (
@@ -195,7 +195,7 @@ export default function ArtworkPage() {
                     href="/contact"
                     className="inline-block px-8 py-3 border-2 border-black text-black text-sm tracking-widest uppercase hover:bg-black hover:text-white transition-colors"
                   >
-                    Skontaktuj się
+                    Contact me
                   </Link>
                 </div>
               )}
