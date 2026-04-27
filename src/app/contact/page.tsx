@@ -1,5 +1,5 @@
 import { Mail, Instagram } from "lucide-react";
-import Link from "next/link";
+import ContactForm from "@/components/ContactForm";
 
 export default function ContactPage() {
   return (
@@ -59,8 +59,16 @@ export default function ContactPage() {
           </a>
         </div>
 
+        {/* Contact Form */}
+        <div className="border-t border-gray-200 pt-16 max-w-3xl mx-auto">
+          <h2 className="font-serif text-3xl md:text-4xl mb-10 text-center">
+            Send a message
+          </h2>
+          <ContactForm />
+        </div>
+
         {/* Additional Info */}
-        <div className="text-center space-y-8 border-t border-gray-200 pt-16">
+        <div className="text-center space-y-8 border-t border-gray-200 pt-16 mt-16">
           <div>
             <p className="text-sm tracking-wider uppercase text-gray-500 mb-2">
               Studio
@@ -69,13 +77,6 @@ export default function ContactPage() {
               Kazimierska Oasis of Art
               <br />
               Bochotnica, Poland
-            </p>
-          </div>
-
-          <div className="pt-8">
-            <p className="text-sm text-gray-500 italic">
-              For general inquiries, please allow 2-3 business days for a
-              response
             </p>
           </div>
         </div>
