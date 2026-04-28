@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { Artwork, ArtworkType } from "../../../types/database";
 
@@ -11,7 +11,9 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Artwork>>({});
   const [sortBy, setSortBy] = useState<"order" | "date">("order");
+  const [showSaveToast, setShowSaveToast] = useState(false);
   const artworkTypes: ArtworkType[] = ["sculpture", "painting", "drawing"];
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const ADMIN_PASSWORD = "123"; // Zmień na swoje hasło!
 
@@ -20,6 +22,24 @@ export default function AdminPage() {
       loadArtworks();
     }
   }, [isAuthenticated, sortBy]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
+    };
+  }, []);
+
+  function triggerSaveToast() {
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+    setShowSaveToast(true);
+    toastTimerRef.current = setTimeout(() => {
+      setShowSaveToast(false);
+    }, 2500);
+  }
 
   async function loadArtworks() {
     const { data } = await supabase
@@ -41,7 +61,7 @@ export default function AdminPage() {
       .eq("id", editingId);
 
     if (!error) {
-      alert("✅ Zapisano!");
+      triggerSaveToast();
       setEditingId(null);
       loadArtworks();
     } else {
@@ -105,6 +125,11 @@ export default function AdminPage() {
 
   return (
     <main className="min-h-screen bg-white pt-32 pb-20">
+      {showSaveToast && (
+        <div className="fixed right-6 top-24 z-50 rounded-lg bg-black px-4 py-3 text-sm text-white shadow-lg">
+          ✅ Zmiany zapisane
+        </div>
+      )}
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center mb-8">
           <div>
