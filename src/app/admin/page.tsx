@@ -9,6 +9,7 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState<Partial<Artwork>>({});
   const [sortBy, setSortBy] = useState<"order" | "date">("order");
   const [showSaveToast, setShowSaveToast] = useState(false);
@@ -39,6 +40,79 @@ export default function AdminPage() {
     toastTimerRef.current = setTimeout(() => {
       setShowSaveToast(false);
     }, 2500);
+  }
+
+  function getNextOrderIndex() {
+    if (artworks.length === 0) return 0;
+    const maxOrder = Math.max(...artworks.map((a) => a.order_index ?? 0));
+    return maxOrder + 1;
+  }
+
+  function extractStoragePathFromUrl(imageUrl: string) {
+    const marker = "/storage/v1/object/public/artworks/";
+    const index = imageUrl.indexOf(marker);
+    if (index === -1) return "";
+    return imageUrl.slice(index + marker.length);
+  }
+
+  function startCreate() {
+    setEditingId(null);
+    setIsCreating(true);
+    setFormData({
+      title: "",
+      description: "",
+      type: "sculpture",
+      image_url: "",
+      storage_path: "",
+      year: undefined,
+      price: undefined,
+      is_sold: false,
+      is_published: true,
+      order_index: getNextOrderIndex(),
+      dimensions: "",
+      material: "",
+      technique: "",
+    });
+  }
+
+  async function createArtwork() {
+    const title = (formData.title || "").trim();
+    const imageUrl = (formData.image_url || "").trim();
+    const resolvedStoragePath =
+      (formData.storage_path || "").trim() || extractStoragePathFromUrl(imageUrl);
+    const type = formData.type;
+
+    if (!title || !imageUrl || !resolvedStoragePath || !type) {
+      alert("❌ Uzupełnij: tytuł, typ, image_url oraz storage_path.");
+      return;
+    }
+
+    const payload = {
+      title,
+      description: (formData.description || "").trim() || null,
+      type,
+      image_url: imageUrl,
+      storage_path: resolvedStoragePath,
+      year: formData.year ?? null,
+      price: formData.price ?? null,
+      is_sold: formData.is_sold ?? false,
+      is_published: formData.is_published ?? true,
+      order_index: formData.order_index ?? getNextOrderIndex(),
+      dimensions: (formData.dimensions || "").trim() || null,
+      material: (formData.material || "").trim() || null,
+      technique: (formData.technique || "").trim() || null,
+    };
+
+    const { error } = await supabase.from("artworks").insert(payload);
+
+    if (!error) {
+      triggerSaveToast();
+      setIsCreating(false);
+      setFormData({});
+      loadArtworks();
+    } else {
+      alert("❌ Błąd: " + error.message);
+    }
   }
 
   async function loadArtworks() {
@@ -139,8 +213,13 @@ export default function AdminPage() {
             </p>
           </div>
 
-          {/* Sortowanie */}
           <div className="flex gap-2">
+            <button
+              onClick={startCreate}
+              className="px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700"
+            >
+              ➕ Dodaj nowe dzieło
+            </button>
             <button
               onClick={() => setSortBy("order")}
               className={`px-4 py-2 rounded ${
@@ -163,6 +242,179 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
+
+        {isCreating && (
+          <div className="border-2 border-emerald-300 bg-emerald-50 p-6 rounded-lg mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">Nowe dzieło</h2>
+              <span className="text-xs uppercase tracking-wide text-emerald-700">
+                Tryb dodawania
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {formData.image_url && (
+                <div className="w-full max-w-md">
+                  <img
+                    src={formData.image_url}
+                    alt={formData.title || "Nowe dzieło"}
+                    className="w-full h-auto rounded-lg"
+                  />
+                </div>
+              )}
+
+              <input
+                type="text"
+                value={formData.title || ""}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Tytuł *"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+              />
+
+              <input
+                type="text"
+                value={formData.image_url || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, image_url: e.target.value })
+                }
+                placeholder="image_url *"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+              />
+
+              <input
+                type="text"
+                value={formData.storage_path || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, storage_path: e.target.value })
+                }
+                placeholder="storage_path * (np. IMG_2818.webp)"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+              />
+
+              <fieldset className="space-y-2">
+                <legend className="text-sm text-gray-600">Typ dzieła *</legend>
+                <div className="flex flex-wrap gap-4">
+                  {artworkTypes.map((type) => (
+                    <label
+                      key={type}
+                      className="flex items-center gap-2 text-sm text-gray-700"
+                    >
+                      <input
+                        type="radio"
+                        name="new-artwork-type"
+                        value={type}
+                        checked={formData.type === type}
+                        onChange={() => setFormData({ ...formData, type })}
+                        className="accent-black"
+                      />
+                      <span className="capitalize">{type}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+
+              <textarea
+                value={formData.description || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                placeholder="Opis"
+                rows={3}
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  value={formData.material || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, material: e.target.value })
+                  }
+                  placeholder="Materiał"
+                  className="px-4 py-2 border border-gray-300 rounded"
+                />
+
+                <input
+                  type="text"
+                  value={formData.dimensions || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dimensions: e.target.value })
+                  }
+                  placeholder="Wymiary"
+                  className="px-4 py-2 border border-gray-300 rounded"
+                />
+
+                <input
+                  type="text"
+                  value={formData.technique || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, technique: e.target.value })
+                  }
+                  placeholder="Technika"
+                  className="px-4 py-2 border border-gray-300 rounded"
+                />
+
+                <input
+                  type="number"
+                  value={formData.year || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      year: parseInt(e.target.value) || undefined,
+                    })
+                  }
+                  placeholder="Rok"
+                  className="px-4 py-2 border border-gray-300 rounded"
+                />
+
+                <input
+                  type="number"
+                  step="0.01"
+                  value={formData.price || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      price: parseFloat(e.target.value) || undefined,
+                    })
+                  }
+                  placeholder="Cena (PLN)"
+                  className="px-4 py-2 border border-gray-300 rounded"
+                />
+
+                <input
+                  type="number"
+                  value={formData.order_index ?? getNextOrderIndex()}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      order_index: parseInt(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="Kolejność"
+                  className="px-4 py-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={createArtwork}
+                  className="px-6 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700"
+                >
+                  ✅ Dodaj dzieło
+                </button>
+                <button
+                  onClick={() => {
+                    setIsCreating(false);
+                    setFormData({});
+                  }}
+                  className="px-6 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                >
+                  Anuluj
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="space-y-6">
           {artworks.map((artwork) => (
