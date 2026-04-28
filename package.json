@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "import-artworks": "tsx scripts/import-artworks.ts",
-    "optimize-upload": "tsx scripts/optimize_and_upload.ts"
+    "optimize-upload": "tsx scripts/optimize_and_upload.ts",
+    "fix-artwork-paths": "tsx scripts/fix-artwork-storage-paths.ts"
   },
   "dependencies": {
     "@radix-ui/react-navigation-menu": "^1.2.14",

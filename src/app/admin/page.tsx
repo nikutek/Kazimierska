@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { Artwork } from "../../../types/database";
+import { Artwork, ArtworkType } from "../../../types/database";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState<Partial<Artwork>>({});
   const [sortBy, setSortBy] = useState<"order" | "date">("order");
+  const artworkTypes: ArtworkType[] = ["sculpture", "painting", "drawing"];
 
   const ADMIN_PASSWORD = "123"; // Zmień na swoje hasło!
 
@@ -175,6 +176,28 @@ export default function AdminPage() {
                     rows={3}
                     className="w-full px-4 py-2 border border-gray-300 rounded"
                   />
+
+                  <fieldset className="space-y-2">
+                    <legend className="text-sm text-gray-600">Typ dzieła</legend>
+                    <div className="flex flex-wrap gap-4">
+                      {artworkTypes.map((type) => (
+                        <label
+                          key={type}
+                          className="flex items-center gap-2 text-sm text-gray-700"
+                        >
+                          <input
+                            type="radio"
+                            name={`artwork-type-${artwork.id}`}
+                            value={type}
+                            checked={formData.type === type}
+                            onChange={() => setFormData({ ...formData, type })}
+                            className="accent-black"
+                          />
+                          <span className="capitalize">{type}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
 
                   <div className="grid grid-cols-2 gap-4">
                     <input
