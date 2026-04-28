@@ -3,7 +3,7 @@ import ContactForm from "@/components/ContactForm";
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center">
+    <main className="relative min-h-screen bg-white flex items-center justify-center">
       <div className="max-w-4xl mx-auto px-6 lg:px-8 py-32">
         {/* Header */}
         <div className="text-center mb-20">
@@ -79,6 +79,26 @@ export default function ContactPage() {
               Bochotnica, Poland
             </p>
           </div>
+        </div>
+      </div>
+
+      <div className="group fixed bottom-4 right-4 z-20 text-right">
+        <p className="text-xs text-gray-500 tracking-wide">created by Nikodem Goławski</p>
+        <div className="mt-1 space-y-1 opacity-0 translate-y-1 pointer-events-none transition-all duration-200 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto">
+          <a
+            href="mailto:n.golawski@gmail.com"
+            className="block text-xs text-gray-600 hover:text-black"
+          >
+            n.golawski@gmail.com
+          </a>
+          <a
+            href="https://github.com/nikutek"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block text-xs text-gray-600 hover:text-black"
+          >
+            github.com/nikutek
+          </a>
         </div>
       </div>
     </main>
