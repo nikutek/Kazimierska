@@ -5,8 +5,6 @@ import { supabase } from "@/lib/supabase";
 import { Artwork, ArtworkType } from "../../../types/database";
 
 export default function AdminPage() {
-  const [password, setPassword] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -16,13 +14,9 @@ export default function AdminPage() {
   const artworkTypes: ArtworkType[] = ["sculpture", "painting", "drawing"];
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const ADMIN_PASSWORD = "123"; // Zmień na swoje hasło!
-
   useEffect(() => {
-    if (isAuthenticated) {
-      loadArtworks();
-    }
-  }, [isAuthenticated, sortBy]);
+    loadArtworks();
+  }, [sortBy]);
 
   useEffect(() => {
     return () => {
@@ -103,15 +97,20 @@ export default function AdminPage() {
       technique: (formData.technique || "").trim() || null,
     };
 
-    const { error } = await supabase.from("artworks").insert(payload);
+    const res = await fetch("/api/admin/artworks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await res.json();
 
-    if (!error) {
+    if (res.ok) {
       triggerSaveToast();
       setIsCreating(false);
       setFormData({});
       loadArtworks();
     } else {
-      alert("❌ Błąd: " + error.message);
+      alert("❌ Błąd: " + (result.error || "Nie udało się dodać dzieła."));
     }
   }
 
@@ -129,17 +128,19 @@ export default function AdminPage() {
   async function saveArtwork() {
     if (!editingId) return;
 
-    const { error } = await supabase
-      .from("artworks")
-      .update(formData)
-      .eq("id", editingId);
+    const res = await fetch(`/api/admin/artworks/${editingId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const result = await res.json();
 
-    if (!error) {
+    if (res.ok) {
       triggerSaveToast();
       setEditingId(null);
       loadArtworks();
     } else {
-      alert("❌ Błąd: " + error.message);
+      alert("❌ Błąd: " + (result.error || "Nie udało się zapisać zmian."));
     }
   }
 
@@ -148,13 +149,16 @@ export default function AdminPage() {
       return;
     }
 
-    const { error } = await supabase.from("artworks").delete().eq("id", id);
+    const res = await fetch(`/api/admin/artworks/${id}`, {
+      method: "DELETE",
+    });
+    const result = await res.json();
 
-    if (!error) {
+    if (res.ok) {
       alert("🗑️ Usunięto!");
       loadArtworks();
     } else {
-      alert("❌ Błąd: " + error.message);
+      alert("❌ Błąd: " + (result.error || "Nie udało się usunąć dzieła."));
     }
   }
 
@@ -163,38 +167,9 @@ export default function AdminPage() {
     setFormData(artwork);
   }
 
-  if (!isAuthenticated) {
-    return (
-      <main className="min-h-screen bg-white flex items-center justify-center">
-        <div className="max-w-md w-full px-6">
-          <h1 className="text-3xl font-bold mb-8 text-center">Admin Panel</h1>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && password === ADMIN_PASSWORD) {
-                setIsAuthenticated(true);
-              }
-            }}
-            placeholder="Hasło"
-            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-black outline-none"
-          />
-          <button
-            onClick={() => {
-              if (password === ADMIN_PASSWORD) {
-                setIsAuthenticated(true);
-              } else {
-                alert("❌ Złe hasło");
-              }
-            }}
-            className="w-full mt-4 px-4 py-3 bg-black text-white rounded-lg hover:bg-gray-800"
-          >
-            Zaloguj
-          </button>
-        </div>
-      </main>
-    );
+  async function logout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
   }
 
   return (
@@ -214,6 +189,12 @@ export default function AdminPage() {
           </div>
 
           <div className="flex gap-2">
+            <button
+              onClick={logout}
+              className="px-4 py-2 rounded bg-gray-700 text-white hover:bg-gray-800"
+            >
+              Wyloguj
+            </button>
             <button
               onClick={startCreate}
               className="px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700"
