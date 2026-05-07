@@ -206,7 +206,13 @@ export default function AboutPage() {
                 location="Pier 36, New York City"
                 description="Presented with ORAC Gallery"
                 isArtFair
-                /><ExhibitionItem title="Painted"
+                />
+                <ExhibitionItem
+                  title="PROM Scholarship – International Artistic Mobility"
+                  location="National Agency for Academic Exchange (NAWA), Poland"
+                  description="Scholarship support for participation in ART EXPO NEW YORK 2026, awarded by the University of Siedlce committee, in the context of international artistic mobility and research on contemporary sculpture."
+                />
+                <ExhibitionItem title="Painted"
                 location="Terminal Kultury Gocław, Warsaw"
                 description="group exhibition of members of the Mazovian District of the Związek Artystów Plastyków"
                 />
