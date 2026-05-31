@@ -596,6 +596,14 @@ export default function AboutPage() {
               />
 
               <PublicationItem
+                year="2023"
+                title="NATURA PĘDZLEM MALOWANA"
+                type="Catalog"
+                publisher="Muzeum Narodowe Rolnictwa w Szreniawie"
+                isbn="978-83-967907-0-5"
+              />
+
+              <PublicationItem
                 year="2022"
                 title="ZWIĄZEK ARTYSTÓW PLASTYKÓW O.M. 2022"
                 type="Catalog"
@@ -747,19 +755,21 @@ function PublicationItem({
   year,
   title,
   type,
+  publisher,
   isbn,
   link,
 }: {
-  year: string;
+  year?: string;
   title: string;
   type: string;
+  publisher?: string;
   isbn?: string;
   link?: string;
 }) {
   return (
     <div className="border-l-2 border-gray-200 pl-6">
       <div className="flex items-baseline gap-3 mb-2">
-        <span className="text-sm font-medium text-gray-500">{year}</span>
+        {year && <span className="text-sm font-medium text-gray-500">{year}</span>}
         <span className="text-xs tracking-wider uppercase text-gray-500">
           {type}
         </span>
@@ -768,6 +778,7 @@ function PublicationItem({
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <h4 className="font-medium text-lg mb-1">{title}</h4>
+          {publisher && <p className="text-sm text-gray-600 mb-0.5">{publisher}</p>}
           {isbn && <p className="text-sm text-gray-600">ISBN {isbn}</p>}
         </div>
         {link && (

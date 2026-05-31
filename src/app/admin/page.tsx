@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [formData, setFormData] = useState<Partial<Artwork>>({});
   const [sortBy, setSortBy] = useState<"order" | "date">("order");
   const [showSaveToast, setShowSaveToast] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const artworkTypes: ArtworkType[] = ["sculpture", "painting", "drawing"];
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -47,6 +48,32 @@ export default function AdminPage() {
     const index = imageUrl.indexOf(marker);
     if (index === -1) return "";
     return imageUrl.slice(index + marker.length);
+  }
+
+  async function handleImageUpload(file: File, type: ArtworkType) {
+    if (!type) {
+      alert("Najpierw wybierz typ dzieła (rzeźba / malarstwo / rysunek).");
+      return;
+    }
+    setIsUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("type", type);
+      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+      const result = await res.json();
+      if (!res.ok) {
+        alert("❌ Upload błąd: " + (result.error || "Nieznany błąd"));
+        return;
+      }
+      setFormData((prev) => ({
+        ...prev,
+        image_url: result.image_url,
+        storage_path: result.storage_path,
+      }));
+    } finally {
+      setIsUploading(false);
+    }
   }
 
   function startCreate() {
@@ -234,41 +261,11 @@ export default function AdminPage() {
             </div>
 
             <div className="space-y-4">
-              {formData.image_url && (
-                <div className="w-full max-w-md">
-                  <img
-                    src={formData.image_url}
-                    alt={formData.title || "Nowe dzieło"}
-                    className="w-full h-auto rounded-lg"
-                  />
-                </div>
-              )}
-
               <input
                 type="text"
                 value={formData.title || ""}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="Tytuł *"
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-              />
-
-              <input
-                type="text"
-                value={formData.image_url || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, image_url: e.target.value })
-                }
-                placeholder="image_url *"
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-              />
-
-              <input
-                type="text"
-                value={formData.storage_path || ""}
-                onChange={(e) =>
-                  setFormData({ ...formData, storage_path: e.target.value })
-                }
-                placeholder="storage_path * (np. IMG_2818.webp)"
                 className="w-full px-4 py-2 border border-gray-300 rounded"
               />
 
@@ -293,6 +290,38 @@ export default function AdminPage() {
                   ))}
                 </div>
               </fieldset>
+
+              <div className="space-y-2">
+                <label className="block text-sm text-gray-600">Zdjęcie *</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={isUploading}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file && formData.type) {
+                      handleImageUpload(file, formData.type as ArtworkType);
+                    } else if (file && !formData.type) {
+                      alert("Najpierw wybierz typ dzieła.");
+                      e.target.value = "";
+                    }
+                  }}
+                  className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-black file:text-white hover:file:bg-gray-800 disabled:opacity-50"
+                />
+                {isUploading && (
+                  <p className="text-sm text-emerald-600">Przesyłanie zdjęcia...</p>
+                )}
+                {formData.image_url && !isUploading && (
+                  <div className="w-full max-w-md">
+                    <img
+                      src={formData.image_url}
+                      alt={formData.title || "Nowe dzieło"}
+                      className="w-full h-auto rounded-lg"
+                    />
+                    <p className="mt-1 text-xs text-gray-400 break-all">{formData.storage_path}</p>
+                  </div>
+                )}
+              </div>
 
               <textarea
                 value={formData.description || ""}

@@ -9,9 +9,9 @@ export default async function Home() {
     <main className="h-screen w-screen overflow-hidden bg-white">
       <div className="h-full pt-20 px-6 lg:px-8 pb-8 lg:pb-12">
         <div className="h-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12">
-          
+
           {/* Left - Image */}
-          <div className="relative flex-1 min-h-0">
+          <div className="relative flex-1 min-h-0 overflow-hidden">
             <Link href="/portfolio" className="block h-full">
               <Image
                 src={HERO_IMAGE_URL}
