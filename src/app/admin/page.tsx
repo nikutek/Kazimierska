@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Artwork, ArtworkType } from "../../../types/database";
 
@@ -207,6 +208,22 @@ export default function AdminPage() {
         </div>
       )}
       <div className="max-w-7xl mx-auto px-6">
+
+        {/* Section switcher */}
+        <div className="flex gap-4 mb-10">
+          <div className="flex-1 border-2 border-black rounded-lg p-5 bg-black text-white">
+            <p className="text-xs tracking-widest uppercase opacity-60 mb-1">Aktywna sekcja</p>
+            <p className="text-xl font-bold">Portfolio / Artworks</p>
+          </div>
+          <Link
+            href="/admin/photos"
+            className="flex-1 border-2 border-gray-200 rounded-lg p-5 hover:border-black transition-colors group"
+          >
+            <p className="text-xs tracking-widest uppercase text-gray-400 mb-1 group-hover:text-gray-600">Przejdź do</p>
+            <p className="text-xl font-bold text-gray-700 group-hover:text-black">📷 Photo Projects</p>
+          </Link>
+        </div>
+
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold">Edycja Artworks</h1>

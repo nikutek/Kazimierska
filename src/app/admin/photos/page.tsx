@@ -226,15 +226,27 @@ function ListView({
 }) {
   return (
     <>
+      {/* Section switcher */}
+      <div className="flex gap-4 mb-10">
+        <Link
+          href="/admin"
+          className="flex-1 border-2 border-gray-200 rounded-lg p-5 hover:border-black transition-colors group"
+        >
+          <p className="text-xs tracking-widest uppercase text-gray-400 mb-1 group-hover:text-gray-600">Przejdź do</p>
+          <p className="text-xl font-bold text-gray-700 group-hover:text-black">🖼️ Portfolio / Artworks</p>
+        </Link>
+        <div className="flex-1 border-2 border-black rounded-lg p-5 bg-black text-white">
+          <p className="text-xs tracking-widest uppercase opacity-60 mb-1">Aktywna sekcja</p>
+          <p className="text-xl font-bold">📷 Photo Projects</p>
+        </div>
+      </div>
+
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-4xl font-bold">Photo Projects</h1>
           <p className="text-gray-500 mt-1">{chapters.length} chapterów</p>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin" className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm">
-            ← Artworks
-          </Link>
           <button onClick={onStartCreate} className="px-4 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700 text-sm">
             ➕ Nowy chapter
           </button>
