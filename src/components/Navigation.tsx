@@ -28,6 +28,7 @@ export default function Navigation() {
 
   const links = [
     { href: "/portfolio", label: "Portfolio" },
+    { href: "/photo-projects", label: "Photo Projects" },
     { href: "/about", label: "About Me" },
     { href: "/kazimierska-oasis", label: "Kazimierska Oasis of Art" },
     { href: "/contact", label: "Contact" },
