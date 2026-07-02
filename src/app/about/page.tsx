@@ -216,6 +216,12 @@ export default function AboutPage() {
                 location="Terminal Kultury Gocław, Warsaw"
                 description="group exhibition of members of the Mazovian District of the Związek Artystów Plastyków"
                 />
+                <ExhibitionItem
+                  title="Vivid"
+                  location="Artly Mix, Sao Paulo, Brazil"
+                  description='Group exhibition, presentation of the series "A Thought Written in the Form of a Sculpture. On a Journey"'
+                  isGroup
+                />
               </YearGroup>
 
               {/* 2025 */}
