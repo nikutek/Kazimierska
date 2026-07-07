@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import { getPhotoChapterBySlug, getChapterPhotos } from "@/lib/queries";
 import { Photo } from "../../../../types/database";
 
@@ -190,6 +190,9 @@ function PhotoCell({
         loading="lazy"
         quality={80}
       />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+        <Maximize2 className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
     </button>
   );
 }
