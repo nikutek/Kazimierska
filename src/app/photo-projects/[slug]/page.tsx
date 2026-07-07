@@ -113,14 +113,19 @@ export default function ChapterPage() {
 
           {/* Header */}
           <div className="mb-16">
-            <h1 className="font-serif text-5xl md:text-6xl mb-4">{chapter.title}</h1>
-            <div className="flex items-center gap-3 text-gray-500">
-              {chapter.location && <span>{chapter.location}</span>}
-              {chapter.location && <span>·</span>}
-              <span>{formatDate(chapter.shot_date)}</span>
-              <span>·</span>
-              <span>{photos.length} {photos.length === 1 ? "photo" : "photos"}</span>
-            </div>
+            {chapter.location ? (
+              <>
+                <h1 className="font-serif text-5xl md:text-6xl mb-2 uppercase tracking-wide leading-tight">
+                  {chapter.location}
+                </h1>
+                <p className="text-lg text-gray-600">{chapter.title}</p>
+              </>
+            ) : (
+              <h1 className="font-serif text-5xl md:text-6xl mb-2">{chapter.title}</h1>
+            )}
+            <p className="mt-2 text-sm text-gray-400">
+              {formatDate(chapter.shot_date)} · {photos.length} {photos.length === 1 ? "photo" : "photos"}
+            </p>
             {chapter.description && (
               <p className="mt-6 text-gray-600 leading-relaxed max-w-2xl">
                 {chapter.description}
@@ -130,7 +135,7 @@ export default function ChapterPage() {
 
           {/* Photo grid — 2 columns */}
           {photos.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 max-w-4xl mx-auto">
               {photos.map((photo, index) => (
                 <PhotoCell
                   key={photo.id}
