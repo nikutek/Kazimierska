@@ -570,6 +570,12 @@ export default function AboutPage() {
               <h3 className="font-serif text-2xl mb-8">Awards & Honors</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-baseline">
+                  <span className="text-gray-700">
+                    PROM Scholarship – International Artistic Mobility
+                  </span>
+                  <span className="text-sm text-gray-500">2026</span>
+                </div>
+                <div className="flex justify-between items-baseline">
                   <span className="text-gray-700">Title of School Friend</span>
                   <span className="text-sm text-gray-500">2024</span>
                 </div>

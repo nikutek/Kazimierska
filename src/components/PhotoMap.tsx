@@ -1,88 +1,91 @@
 "use client";
 
-import { useRef, useCallback } from "react";
-import Map, { Marker, NavigationControl } from "react-map-gl/maplibre";
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
-import type { MapRef } from "react-map-gl/maplibre";
+import { geoNaturalEarth1, geoPath } from "d3-geo";
+import { feature, mesh } from "topojson-client";
+import type { GeometryCollection, Topology } from "topojson-specification";
+import countries110m from "world-atlas/countries-110m.json";
 import { PhotoChapter } from "../../types/database";
-import "maplibre-gl/dist/maplibre-gl.css";
+
+const VIEW_WIDTH = 640;
+const VIEW_HEIGHT = 340;
+const ANTARCTICA_ID = "010";
 
 type ChapterWithCoords = PhotoChapter & {
   latitude: number;
   longitude: number;
 };
 
-function getBounds(chapters: ChapterWithCoords[]) {
-  const lats = chapters.map((c) => c.latitude);
-  const lngs = chapters.map((c) => c.longitude);
-  return {
-    minLat: Math.min(...lats),
-    maxLat: Math.max(...lats),
-    minLng: Math.min(...lngs),
-    maxLng: Math.max(...lngs),
-  };
-}
-
 export default function PhotoMap({ chapters }: { chapters: PhotoChapter[] }) {
   const router = useRouter();
-  const mapRef = useRef<MapRef>(null);
 
   const chaptersWithCoords = chapters.filter(
     (c): c is ChapterWithCoords => c.latitude != null && c.longitude != null
   );
 
-  const onMapLoad = useCallback(() => {
-    if (!mapRef.current || chaptersWithCoords.length === 0) return;
-    if (chaptersWithCoords.length === 1) {
-      mapRef.current.flyTo({
-        center: [chaptersWithCoords[0].longitude, chaptersWithCoords[0].latitude],
-        zoom: 8,
-      });
-      return;
-    }
-    const bounds = getBounds(chaptersWithCoords);
-    mapRef.current.fitBounds(
-      [
-        [bounds.minLng, bounds.minLat],
-        [bounds.maxLng, bounds.maxLat],
-      ],
-      { padding: 80, duration: 0, maxZoom: 10 }
-    );
-  }, [chaptersWithCoords]);
+  const { fillPath, borderPath, projection } = useMemo(() => {
+    const topology = countries110m as unknown as Topology;
+    const countries = topology.objects.countries as GeometryCollection;
+    const geometries = countries.geometries.filter((g) => g.id !== ANTARCTICA_ID);
+    const filtered: GeometryCollection = { ...countries, geometries };
+
+    const countriesFeature = feature(topology, filtered);
+    const proj = geoNaturalEarth1().fitSize([VIEW_WIDTH, VIEW_HEIGHT], countriesFeature);
+    const path = geoPath(proj);
+    const borders = mesh(topology, filtered, (a, b) => a !== b);
+
+    return {
+      fillPath: path(countriesFeature) ?? "",
+      borderPath: path(borders) ?? "",
+      projection: proj,
+    };
+  }, []);
 
   if (chaptersWithCoords.length === 0) return null;
 
   return (
-    <div className="w-full h-[300px] md:h-[420px] rounded-sm overflow-hidden mb-16">
-      <Map
-        ref={mapRef}
-        mapStyle="https://tiles.openfreemap.org/styles/liberty"
-        initialViewState={{ longitude: 21, latitude: 52, zoom: 4 }}
-        onLoad={onMapLoad}
-        style={{ width: "100%", height: "100%" }}
+    <div className="max-w-2xl mx-auto">
+      <div
+        className="relative w-full select-none"
+        style={{ aspectRatio: `${VIEW_WIDTH} / ${VIEW_HEIGHT}` }}
       >
-        <NavigationControl position="top-right" showCompass={false} />
+        <svg
+          viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
+          preserveAspectRatio="xMidYMid meet"
+          className="absolute inset-0 w-full h-full"
+        >
+          <path d={fillPath} fill="#e5e5e5" stroke="none" />
+          <path
+            d={borderPath}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={0.6}
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
 
-        {chaptersWithCoords.map((chapter) => (
-          <Marker
-            key={chapter.id}
-            longitude={chapter.longitude}
-            latitude={chapter.latitude}
-            anchor="center"
-          >
+        {chaptersWithCoords.map((chapter) => {
+          const point = projection([chapter.longitude, chapter.latitude]);
+          if (!point) return null;
+          const [x, y] = point;
+          return (
             <button
+              key={chapter.id}
               onClick={() => router.push(`/photo-projects/${chapter.slug}`)}
               title={chapter.title}
-              className="group relative"
+              className="group absolute -translate-x-1/2 -translate-y-1/2"
+              style={{ left: `${(x / VIEW_WIDTH) * 100}%`, top: `${(y / VIEW_HEIGHT) * 100}%` }}
             >
-              <span className="block w-3 h-3 rounded-full bg-black group-hover:scale-150 transition-transform duration-200" />
-              <span className="absolute bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                {chapter.title}
+              <span className="block w-1.5 h-1.5 rounded-full bg-black/70 ring-4 ring-black/10 group-hover:bg-black group-hover:scale-150 transition-all duration-200" />
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                {chapter.location || chapter.title}
               </span>
             </button>
-          </Marker>
-        ))}
-      </Map>
+          );
+        })}
+      </div>
     </div>
   );
 }

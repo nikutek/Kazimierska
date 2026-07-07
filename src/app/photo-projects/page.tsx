@@ -1,12 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { usePhotoChapters } from "@/hooks/usePhotoProjects";
 import { PhotoChapter } from "../../../types/database";
-
-const PhotoMap = dynamic(() => import("@/components/PhotoMap"), { ssr: false });
+import PhotoMap from "@/components/PhotoMap";
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr + "T00:00:00");
@@ -17,11 +16,11 @@ export default function PhotoProjectsPage() {
   const { data: chapters = [], isLoading } = usePhotoChapters();
 
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
+    <main className="min-h-screen bg-white pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-16 text-center">
-          <h1 className="font-serif text-5xl md:text-6xl mb-4">Photo Projects</h1>
+        <div className="mb-8 text-center">
+          <h1 className="font-serif text-4xl md:text-5xl mb-2">Photo Projects</h1>
           {!isLoading && (
             <p className="text-gray-500 tracking-wide">
               {chapters.length} {chapters.length === 1 ? "chapter" : "chapters"}
@@ -29,27 +28,33 @@ export default function PhotoProjectsPage() {
           )}
         </div>
 
+        {/* Map (supplementary) */}
+        {!isLoading && (
+          <div className="max-w-3xl mx-auto mb-8">
+            <PhotoMap chapters={chapters} />
+          </div>
+        )}
+
         {/* Loading skeleton */}
         {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="divide-y divide-gray-200 border-t border-b border-gray-200 max-w-3xl mx-auto">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="space-y-3">
-                <div className="aspect-[4/3] bg-gray-200 animate-pulse rounded-sm" />
-                <div className="h-5 bg-gray-200 animate-pulse rounded w-3/4" />
-                <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2" />
+              <div key={i} className="flex items-center gap-6 py-6">
+                <div className="w-24 h-24 md:w-28 md:h-28 flex-shrink-0 bg-gray-200 animate-pulse rounded-sm" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-6 bg-gray-200 animate-pulse rounded w-1/2" />
+                  <div className="h-4 bg-gray-200 animate-pulse rounded w-1/3" />
+                </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Map */}
-        {!isLoading && <PhotoMap chapters={chapters} />}
-
-        {/* Chapter grid */}
+        {/* Chapter list */}
         {!isLoading && chapters.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="divide-y divide-gray-200 border-t border-b border-gray-200 max-w-3xl mx-auto">
             {chapters.map((chapter) => (
-              <ChapterCard key={chapter.id} chapter={chapter} />
+              <ChapterRow key={chapter.id} chapter={chapter} />
             ))}
           </div>
         )}
@@ -65,34 +70,42 @@ export default function PhotoProjectsPage() {
   );
 }
 
-function ChapterCard({ chapter }: { chapter: PhotoChapter }) {
+function ChapterRow({ chapter }: { chapter: PhotoChapter }) {
   return (
-    <Link href={`/photo-projects/${chapter.slug}`} className="block group">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-gray-100 mb-4">
+    <Link
+      href={`/photo-projects/${chapter.slug}`}
+      className="group flex items-center gap-6 py-6 px-3 -mx-3 rounded-sm transition-colors hover:bg-gray-50"
+    >
+      <div className="relative w-24 h-24 md:w-28 md:h-28 flex-shrink-0 overflow-hidden rounded-sm bg-gray-100">
         {chapter.cover_image_url ? (
           <Image
             src={chapter.cover_image_url}
             alt={chapter.title}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="112px"
             loading="lazy"
             quality={75}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-gray-400 text-sm">No cover image</span>
+            <span className="text-gray-400 text-xs text-center px-1">No cover</span>
           </div>
         )}
       </div>
-      <h2 className="font-serif text-xl mb-1 group-hover:opacity-70 transition-opacity">
-        {chapter.title}
-      </h2>
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        {chapter.location && <span>{chapter.location}</span>}
-        {chapter.location && <span>·</span>}
-        <span>{formatDate(chapter.shot_date)}</span>
+      <div className="flex-1 min-w-0">
+        {chapter.location && (
+          <h2 className="font-serif text-2xl md:text-3xl uppercase tracking-wide leading-tight group-hover:opacity-70 transition-opacity">
+            {chapter.location}
+          </h2>
+        )}
+        <p className="text-gray-600 mt-1">{chapter.title}</p>
+        <p className="text-sm text-gray-400 mt-1">{formatDate(chapter.shot_date)}</p>
       </div>
+      <ArrowRight
+        className="w-5 h-5 flex-shrink-0 text-gray-300 group-hover:text-black group-hover:translate-x-1 transition-all"
+        aria-hidden="true"
+      />
     </Link>
   );
 }
