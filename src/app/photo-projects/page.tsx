@@ -19,7 +19,7 @@ export default function PhotoProjectsPage() {
     <main className="min-h-screen bg-white pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 text-center">
+        <div className="mb-0 text-center">
           <h1 className="font-serif text-4xl md:text-5xl mb-2">Photo Projects</h1>
           {!isLoading && (
             <p className="text-gray-500 tracking-wide">
@@ -30,10 +30,16 @@ export default function PhotoProjectsPage() {
 
         {/* Map (supplementary) */}
         {!isLoading && (
-          <div className="max-w-3xl mx-auto mb-8">
+          <div className="max-w-3xl mx-auto mb-0">
             <PhotoMap chapters={chapters} />
           </div>
         )}
+
+        <p className="font-serif text-xl italic text-gray-700 leading-relaxed max-w-2xl mx-auto text-center mb-8">
+          A Thought Written in the Form of a Sculpture, on a Journey. Leaves the studio and
+          journeys into the world, where every place and encounter become part of its silent
+          experience and an ongoing dialogue with space and the viewer.
+        </p>
 
         {/* Loading skeleton */}
         {isLoading && (
