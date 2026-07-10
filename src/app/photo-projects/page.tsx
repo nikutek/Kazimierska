@@ -35,10 +35,11 @@ export default function PhotoProjectsPage() {
           </div>
         )}
 
-        <p className="font-serif text-xl italic text-gray-700 leading-relaxed max-w-2xl mx-auto text-center mb-8">
-          A Thought Written in the Form of a Sculpture, on a Journey. Leaves the studio and
-          journeys into the world, where every place and encounter become part of its silent
-          experience and an ongoing dialogue with space and the viewer.
+        <p className="font-serif text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto text-center mb-8">
+          <span className="italic">A Thought Written in the Form of a Sculpture, on a Journey.</span>{" "}
+          Leaves the studio and journeys into the world, where every place and
+          encounter become part of its silent experience and an ongoing dialogue
+          with space and the viewer.
         </p>
 
         {/* Loading skeleton */}

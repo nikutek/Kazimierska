@@ -187,7 +187,7 @@ export default function AboutPage() {
                     Education
                   </p>
                   <p className="text-lg">
-                    Academy of Fine Arts, Warsaw
+                    Open Academy of Fine Arts, Warsaw
                     <br />
                     Painting & Drawing, 2020
                   </p>
@@ -571,12 +571,14 @@ export default function AboutPage() {
               <div className="space-y-4">
                 <div className="flex justify-between items-baseline">
                   <span className="text-gray-700">
-                    PROM Scholarship – International Artistic Mobility
+                    Scholarship support for ART EXPO NEW YORK 2026 through the National Agency for Academic Exchange (NAWA) PROM programme, awarded by the committee of the University of Siedlce (in the context of international artistic mobility and research on contemporary sculpture)
                   </span>
                   <span className="text-sm text-gray-500">2026</span>
                 </div>
                 <div className="flex justify-between items-baseline">
-                  <span className="text-gray-700">Title of School Friend</span>
+                  <span className="text-gray-700">
+                    Title of &ldquo;Friend of the School&rdquo;, for cyclical workshops for people with disabilities
+                  </span>
                   <span className="text-sm text-gray-500">2024</span>
                 </div>
                 <div className="flex justify-between items-baseline">
@@ -587,7 +589,7 @@ export default function AboutPage() {
                 </div>
                 <div className="flex justify-between items-baseline">
                   <span className="text-gray-700">
-                    Artistic scholarship "Our Friendly City"
+                    Artistic Scholarship of the Mayor of Siedlce &ldquo;Our Friendly City&rdquo;
                   </span>
                   <span className="text-sm text-gray-500">2019</span>
                 </div>
